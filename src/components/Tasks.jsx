@@ -1,8 +1,10 @@
 import { useContext, useState } from "react";
 import { CRMContext } from "../context/CRMContext";
+import "./Tasks.css";
 
 export default function Tasks() {
-  const { tasks, setTasks, clients, leads } = useContext(CRMContext);
+  const { tasks, addTask, toggleTask, deleteTask, clients, leads } = useContext(CRMContext);
+  
   const [form, setForm] = useState({
     title: "",
     note: "",
@@ -10,108 +12,218 @@ export default function Tasks() {
     dueDate: "",
   });
 
+  const [filterStatus, setFilterStatus] = useState("All"); // 'All' | 'Active' | 'Completed' | 'Overdue'
+  const [viewMode, setViewMode] = useState("list"); // 'list' | 'calendar'
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+
   const handleAdd = (e) => {
     e.preventDefault();
-    if (!form.title) return;
+    if (!form.title.trim()) return;
 
-    const newTask = {
-      id: Date.now(),
-      ...form,
-      done: false,
-    };
-
-    setTasks([...tasks, newTask]);
-
+    addTask(form);
     setForm({ title: "", note: "", assignedTo: "", dueDate: "" });
   };
 
-  const toggleDone = (id) => {
-    setTasks(tasks.map(t =>
-      t.id === id ? { ...t, done: !t.done } : t
-    ));
-  };
+  const allLeads = Object.values(leads || {}).flat();
 
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(t => t.id !== id));
-  };
+  const filteredTasks = tasks.filter((t) => {
+    if (filterStatus === "Active") return !t.done;
+    if (filterStatus === "Completed") return t.done;
+    if (filterStatus === "Overdue") return !t.done && t.dueDate && t.dueDate < todayStr;
+    return true;
+  });
+
+  // Calendar view helper (generate days of current month)
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const calendarDays = Array.from({ length: daysInMonth }, (_, i) => {
+    const d = i + 1;
+    const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const dayTasks = tasks.filter((t) => t.dueDate === dateStr);
+    return { day: d, dateStr, dayTasks };
+  });
 
   return (
-    <div>
-      <h2 style={{ fontSize: "24px", marginBottom: "1rem" }}>Tasks & Notes</h2>
+    <div className="tasks-container">
+      <div className="tasks-header">
+        <div>
+          <h2>✅ Tasks & Reminders</h2>
+          <p style={{ color: "#9ca3af", fontSize: "0.85rem", marginTop: "2px" }}>
+            Track client action items, scheduled calls, and follow-ups
+          </p>
+        </div>
 
-      <form onSubmit={handleAdd} style={{ marginBottom: "1rem" }}>
-        <input
-          type="text"
-          placeholder="Task title"
-          value={form.title}
-          onChange={(e) => setForm({ ...form, title: e.target.value })}
-          style={{ padding: "6px", marginRight: "6px" }}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Sticky note"
-          value={form.note}
-          onChange={(e) => setForm({ ...form, note: e.target.value })}
-          style={{ padding: "6px", marginRight: "6px" }}
-        />
-        <select
-          value={form.assignedTo}
-          onChange={(e) => setForm({ ...form, assignedTo: e.target.value })}
-          style={{ marginRight: "6px" }}
-        >
-          <option value="">Assign to</option>
-          {clients.map((c) => (
-            <option key={c.id} value={c.name}>Client: {c.name}</option>
-          ))}
-          {Object.values(leads).flat().map((l) => (
-            <option key={l.id} value={l.title}>Lead: {l.title}</option>
-          ))}
-        </select>
-        <input
-          type="date"
-          value={form.dueDate}
-          onChange={(e) => setForm({ ...form, dueDate: e.target.value })}
-          style={{ marginRight: "6px" }}
-        />
-        <button type="submit" style={{ padding: "6px 12px" }}>Add</button>
+        <div className="tasks-toolbar">
+          <div className="status-tabs">
+            {["All", "Active", "Completed", "Overdue"].map((status) => (
+              <button
+                key={status}
+                className={`tab-btn ${filterStatus === status ? "active" : ""}`}
+                onClick={() => setFilterStatus(status)}
+              >
+                {status}
+              </button>
+            ))}
+          </div>
+
+          <div className="view-toggle-btns">
+            <button
+              className={`v-btn ${viewMode === "list" ? "active" : ""}`}
+              onClick={() => setViewMode("list")}
+            >
+              📋 List View
+            </button>
+            <button
+              className={`v-btn ${viewMode === "calendar" ? "active" : ""}`}
+              onClick={() => setViewMode("calendar")}
+            >
+              📅 Calendar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Add Task Form */}
+      <form onSubmit={handleAdd} className="task-form-panel">
+        <h3>➕ Add Task or Reminder</h3>
+        <div className="form-inline-grid">
+          <input
+            type="text"
+            placeholder="Task Title (e.g. Prep Q4 presentation)"
+            value={form.title}
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Note / Details"
+            value={form.note}
+            onChange={(e) => setForm({ ...form, note: e.target.value })}
+          />
+          <select
+            value={form.assignedTo}
+            onChange={(e) => setForm({ ...form, assignedTo: e.target.value })}
+          >
+            <option value="">Assign To...</option>
+            {clients.map((c) => (
+              <option key={c.id} value={`Client: ${c.name}`}>
+                Client: {c.name}
+              </option>
+            ))}
+            {allLeads.map((l) => (
+              <option key={l.id} value={`Lead: ${l.title}`}>
+                Lead: {l.title}
+              </option>
+            ))}
+          </select>
+          <input
+            type="date"
+            value={form.dueDate}
+            onChange={(e) => setForm({ ...form, dueDate: e.target.value })}
+          />
+          <button type="submit" className="btn-add-primary">
+            Save Task
+          </button>
+        </div>
       </form>
 
-      {tasks.length === 0 ? (
-        <p>No tasks yet.</p>
+      {/* Task List / Calendar View */}
+      {viewMode === "list" ? (
+        filteredTasks.length === 0 ? (
+          <div style={{ textAlign: "center", color: "#6b7280", padding: "3rem 0" }}>
+            No tasks match your selected filter ({filterStatus}).
+          </div>
+        ) : (
+          <div className="tasks-list">
+            {filteredTasks.map((t) => {
+              const isOverdue = !t.done && t.dueDate && t.dueDate < todayStr;
+              return (
+                <div
+                  key={t.id}
+                  className={`task-card ${t.done ? "completed" : ""} ${isOverdue ? "overdue" : ""}`}
+                >
+                  <div className="task-left">
+                    <input
+                      type="checkbox"
+                      className="task-checkbox"
+                      checked={t.done}
+                      onChange={() => toggleTask(t.id)}
+                    />
+                    <div>
+                      <div
+                        className="task-title"
+                        style={{ textDecoration: t.done ? "line-through" : "none" }}
+                      >
+                        {t.title || t.text}
+                      </div>
+                      {t.note && <div className="task-note">🗒️ {t.note}</div>}
+                      <div className="task-meta">
+                        {t.assignedTo && <span className="assigned-pill">🔗 {t.assignedTo}</span>}
+                        {t.dueDate && (
+                          <span className={`due-pill ${isOverdue ? "urgent" : ""}`}>
+                            📅 Due: {t.dueDate} {isOverdue && "(Overdue)"}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    className="btn-icon"
+                    onClick={() => deleteTask(t.id)}
+                    style={{ color: "#ef4444" }}
+                    title="Delete task"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {tasks.map((task) => (
-            <li
-              key={task.id}
-              style={{
-                backgroundColor: task.done ? "#2c2c2c" : "#1e1e1e",
-                borderLeft: task.done ? "4px solid lime" : "4px solid teal",
-                padding: "10px",
-                marginBottom: "10px",
-                borderRadius: "4px",
-              }}
-            >
-              <div>
-                <input
-                  type="checkbox"
-                  checked={task.done}
-                  onChange={() => toggleDone(task.id)}
-                  style={{ marginRight: "10px" }}
-                />
-                <strong style={{ textDecoration: task.done ? "line-through" : "none" }}>
-                  {task.title}
-                </strong>
-              </div>
-              {task.note && <p style={{ margin: "6px 0" }}>🗒️ {task.note}</p>}
-              {task.assignedTo && <p>🔗 Assigned to: {task.assignedTo}</p>}
-              {task.dueDate && <p>📅 Due: {task.dueDate}</p>}
-              <button onClick={() => deleteTask(task.id)} style={{ color: "red", marginTop: "6px" }}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
+        <div className="calendar-grid-view">
+          <h3 style={{ marginBottom: "1rem", color: "#2dd4bf" }}>
+            📅 {now.toLocaleString("default", { month: "long" })} {year} Calendar
+          </h3>
+          <div className="calendar-days-header">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+          </div>
+          <div className="calendar-month-grid">
+            {calendarDays.map((cd) => {
+              const isToday = cd.dateStr === todayStr;
+              return (
+                <div
+                  key={cd.day}
+                  className={`day-cell ${isToday ? "today-cell" : ""}`}
+                >
+                  <span className="day-num">{cd.day}</span>
+                  <div className="cell-tasks">
+                    {cd.dayTasks.map((t) => (
+                      <div
+                        key={t.id}
+                        className={`cell-task-chip ${t.done ? "done" : ""}`}
+                        onClick={() => toggleTask(t.id)}
+                        title={`${t.title || t.text} (${t.done ? "Done" : "Pending"})`}
+                      >
+                        • {t.title || t.text}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       )}
     </div>
   );

@@ -1,43 +1,478 @@
-.dashboard .stats {
+.dashboard {
   display: flex;
-  gap: 1rem;
-  margin-top: 1rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard-header h2 {
+  font-size: 1.6rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.subtitle {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
+
+.quick-actions-bar {
+  display: flex;
+  gap: 10px;
+}
+
+.qa-btn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.qa-lead {
+  background: #0d9488;
+  color: #fff;
+}
+.qa-lead:hover {
+  background: #14b8a6;
+}
+
+.qa-client {
+  background: #0284c7;
+  color: #fff;
+}
+.qa-client:hover {
+  background: #38bdf8;
+}
+
+.qa-task {
+  background: #e11d48;
+  color: #fff;
+}
+.qa-task:hover {
+  background: #f43f5e;
+}
+
+/* Metric Cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
 }
 
 .card {
-  background-color: #222;
-  padding: 1.5rem;
-  border-left: 5px solid teal;
-  border-radius: 8px;
-  min-width: 150px;
-  flex: 1;
+  background: #1e2230;
+  border: 1px solid #2a2f42;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.card h3 {
-  margin: 0 0 0.5rem;
+.card.clickable {
+  cursor: pointer;
+}
+
+.card.clickable:hover {
+  transform: translateY(-4px);
+  border-color: #0d9488;
+  box-shadow: 0 10px 20px rgba(13, 148, 136, 0.15);
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-top h3 {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.card-icon {
+  font-size: 1.3rem;
+}
+
+.card-val {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0.4rem 0;
+}
+
+.card-foot {
+  font-size: 0.8rem;
+  color: #2dd4bf;
+  font-weight: 500;
+}
+
+.highlight-card {
+  background: linear-gradient(135deg, #1e2230 0%, #172533 100%);
+  border-color: #3b82f6;
+}
+
+.mini-progress-bar {
+  height: 6px;
+  background: #374151;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 6px;
+}
+
+.mini-progress-fill {
+  height: 100%;
+  background: #3b82f6;
+  transition: width 0.4s ease;
+}
+
+/* Dashboard Grid Layout */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.panel {
+  background: #1e2230;
+  border: 1px solid #2a2f42;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.panel h3 {
   font-size: 1.1rem;
-  color: #ccc;
+  color: #f3f4f6;
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
-.card p {
-  font-size: 1.8rem;
-  color: white;
-}
-.dashboard-section {
-  margin-top: 2rem;
+.view-link {
+  background: none;
+  border: none;
+  color: #2dd4bf;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-weight: 500;
 }
 
+.view-link:hover {
+  text-decoration: underline;
+}
+
+/* Pipeline Stage Row Visuals */
+.pipeline-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pipeline-stage-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.pipeline-stage-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.stage-label-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.stage-name {
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+.stage-count {
+  color: #9ca3af;
+  font-size: 0.85rem;
+}
+
+.bar-track {
+  height: 20px;
+  background: #141721;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  transition: width 0.5s ease;
+}
+
+.bar-text {
+  font-size: 0.75rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* Task Completion Meter */
+.task-meter-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 1rem 0;
+}
+
+.progress-ring-container {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 8px solid #0d9488;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #141721;
+}
+
+.progress-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.progress-subtext {
+  font-size: 0.7rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+}
+
+.task-meter-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meter-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.m-val {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2dd4bf;
+  min-width: 30px;
+}
+
+.m-lbl {
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+/* Activity Feed */
+.activity-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-list li {
+  display: flex;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.act-bullet {
+  color: #0d9488;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.act-text {
+  color: #e5e7eb;
+}
+
+.act-time {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+/* Preview Lists */
 .preview-list {
   list-style: none;
-  padding-left: 0;
-  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.preview-list li {
-  background: #222;
-  padding: 0.8rem;
-  margin-bottom: 0.5rem;
-  border-left: 4px solid teal;
+.task-item-preview {
+  background: #141721;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border-left: 4px solid #0d9488;
+}
+
+.t-title {
+  font-weight: 600;
+  color: #f3f4f6;
+  font-size: 0.9rem;
+}
+
+.t-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.t-tag {
+  background: #272d3d;
+  padding: 2px 6px;
   border-radius: 4px;
+}
+
+.t-date.urgent {
+  color: #f43f5e;
+  font-weight: 600;
+}
+
+.empty {
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* Modal Overlay & Forms */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal-card {
+  background: #1e2230;
+  border: 1px solid #2a2f42;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 480px;
+  padding: 1.5rem;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.modal-header h3 {
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-form input,
+.modal-form textarea,
+.modal-form select {
+  background: #141721;
+  border: 1px solid #2a2f42;
+  color: #fff;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.modal-form input:focus,
+.modal-form textarea:focus,
+.modal-form select:focus {
+  border-color: #0d9488;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-cancel {
+  padding: 8px 16px;
+  background: #272d3d;
+  border: none;
+  color: #9ca3af;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-submit {
+  padding: 8px 16px;
+  background: #0d9488;
+  border: none;
+  color: #fff;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-submit:hover {
+  background: #14b8a6;
 }

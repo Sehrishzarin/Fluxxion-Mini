@@ -1,0 +1,261 @@
+.leads-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.leads-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.leads-header-row h2 {
+  font-size: 1.6rem;
+  color: #fff;
+}
+
+.leads-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.leads-search-input {
+  background: #1e2230;
+  border: 1px solid #2a2f42;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  outline: none;
+  min-width: 220px;
+}
+.leads-search-input:focus {
+  border-color: #0d9488;
+}
+
+.priority-filter-group {
+  display: flex;
+  background: #1e2230;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #2a2f42;
+  gap: 4px;
+}
+
+.p-filter-btn {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.p-filter-btn.active {
+  background: #0d9488;
+  color: #fff;
+  font-weight: 600;
+}
+
+.add-lead-card-form {
+  background: #1e2230;
+  border: 1px solid #2a2f42;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.add-lead-card-form h3 {
+  font-size: 1rem;
+  color: #2dd4bf;
+  margin-bottom: 0.8rem;
+}
+
+.form-inline-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.form-inline-grid input,
+.form-inline-grid select {
+  background: #141721;
+  border: 1px solid #2a2f42;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.btn-add-primary {
+  background: #0d9488;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: background 0.2s;
+}
+
+.btn-add-primary:hover {
+  background: #14b8a6;
+}
+
+/* Kanban Board Columns */
+.kanban-board {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  align-items: flex-start;
+}
+
+.kanban-column {
+  flex: 1;
+  min-width: 260px;
+  background: #161922;
+  border: 2px dashed #232734;
+  border-radius: 12px;
+  padding: 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  min-height: 450px;
+}
+
+.kanban-column.drag-over {
+  border-color: #2dd4bf;
+  background: rgba(45, 212, 191, 0.05);
+}
+
+.column-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #232734;
+}
+
+.column-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.col-count {
+  background: #272d3d;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+
+.cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lead-card {
+  background: #1e2230;
+  border: 1px solid #2a2f42;
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  position: relative;
+}
+
+.lead-card:hover {
+  transform: translateY(-2px);
+  border-color: #3b3b4f;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+.lead-card:active {
+  cursor: grabbing;
+}
+
+.lead-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.lead-card-title {
+  font-weight: 600;
+  color: #f3f4f6;
+  font-size: 0.95rem;
+}
+
+.p-pill {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.p-High { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); }
+.p-Medium { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.4); }
+.p-Low { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); }
+
+.lead-card-desc {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  margin: 6px 0;
+}
+
+.lead-card-meta {
+  font-size: 0.8rem;
+  color: #6b7280;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #272d3d;
+}
+
+.lead-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.stage-select-quick {
+  background: #141721;
+  border: 1px solid #2a2f42;
+  color: #9ca3af;
+  font-size: 0.75rem;
+  padding: 4px 6px;
+  border-radius: 6px;
+  outline: none;
+}
+
+.card-btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+.btn-icon:hover {
+  background: #272d3d;
+}
